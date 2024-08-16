@@ -170,5 +170,4 @@ router.post("/diary", async function (req, res) {
     res.send({"message": `求められているパラメータが不足しています。 imageURL: ${imageURL}, voiceURL: ${voiceURL}, uid: ${uid}`});
   }
 });
-
 module.exports = router;
