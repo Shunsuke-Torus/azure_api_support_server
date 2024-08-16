@@ -1,0 +1,34 @@
+{
+  "name": "azure_api_support_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shunsuke-Torus/azure_api_support_server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shunsuke-Torus/azure_api_support_server/issues"
+  },
+  "homepage": "https://github.com/Shunsuke-Torus/azure_api_support_server#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "asynckit": "^0.4.0",
+    "axios": "^1.6.2",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
+    "ejs": "~2.6.1",
+    "firebase-admin": "^11.11.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  }
+}
