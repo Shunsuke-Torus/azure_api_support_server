@@ -136,7 +136,8 @@ function urlChangeGS(url){
 
 async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText){
   try{
-    const docRef = db.collection('Users').doc(uid).collection("Diary");
+    const roomid = db.collection('Rooms').where('members','arrayContains',uid).get().doc.first.id;
+    const docRef = db.collection('Rooms').doc(roomid).collection("Diaries");
     console.log(docRef);
     await docRef.add({
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
