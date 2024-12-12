@@ -136,7 +136,11 @@ function urlChangeGS(url){
 
 async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText){
   try{
-    const roomid = db.collection('Rooms').where('members','arrayContains',uid).get().doc.first.id;
+    const roomSnapshot = await db.collection('Rooms').where('members', 'array-contains', uid).get();
+    if (roomSnapshot.empty) {
+      throw new Error('No matching documents.');
+    }
+    const roomid = roomSnapshot.docs[0].id;
     const docRef = db.collection('Rooms').doc(roomid).collection("Diaries");
     console.log(docRef);
     await docRef.add({
