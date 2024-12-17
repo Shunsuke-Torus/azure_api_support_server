@@ -134,7 +134,7 @@ function urlChangeGS(url){
   return result;
 }
 
-async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText){
+async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,tag){
   try{
     const roomSnapshot = await db.collection('Rooms').where('members', 'array-contains', uid).get();
     if (roomSnapshot.empty) {
@@ -148,7 +148,8 @@ async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText){
       emotionResult: emotionResult,
       imageURL: imageURL,
       voiceURL: voiceURL,
-      voiceText: voiceText
+      voiceText: voiceText,
+      tag: tag,
     });
     return {"code":"0","Message":"Save is Done."}
   }catch(e){
@@ -161,18 +162,19 @@ router.get("/", (req, res) => {
 });
 
 router.post("/diary", async function (req, res) {
-  const imageURL = req.body.imageURL; //画像のURLもらう
-  const voiceURL = req.body.voiceURL; //音声のURLもらう
-  const uid = req.body.uid; //uidもらう
+  const imageURL = req.body.imageURL; 
+  const voiceURL = req.body.voiceURL; 
+  const uid = req.body.uid;
+  const tag = req.body.tag;
 
   if(imageURL.length > 0 && voiceURL.length > 0 && uid.length > 0){
     console.log(voiceURL)
-    const emotionResult = await imageAnalys(urlChangeGS(imageURL)); // APIに画像のURLを渡し、結果をレスポンスで返却してます
-    const voiceText = await speechToText(urlChangeGS(voiceURL)); //音声の文字起こし
-    const statusMessage = await setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText);  // uid使ってFirestoreのサブコレクション(Diary)に保存
+    const emotionResult = await imageAnalys(urlChangeGS(imageURL));
+    const voiceText = await speechToText(urlChangeGS(voiceURL)); 
+    const statusMessage = await setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,tag);
     res.send(statusMessage);
   }else{
-    res.send({"message": `求められているパラメータが不足しています。 imageURL: ${imageURL}, voiceURL: ${voiceURL}, uid: ${uid}`});
+    res.send({"message": `求められているパラメータが不足しています。 imageURL: ${imageURL}, voiceURL: ${voiceURL}, uid: ${uid},tag:${tag}`});
   }
 });
 module.exports = router;
