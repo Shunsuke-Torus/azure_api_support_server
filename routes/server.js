@@ -150,6 +150,7 @@ async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,ta
       voiceURL: voiceURL,
       voiceText: voiceText,
       tag: tag,
+      createdBy: uid,
     });
     return {"code":"0","Message":"Save is Done."}
   }catch(e){
