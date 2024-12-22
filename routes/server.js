@@ -165,16 +165,18 @@ router.get("/", (req, res) => {
 });
 
 router.post("/diary", async function (req, res) {
+  const diaryId = req.body.diaryId;
   const imageURL = req.body.imageURL; 
   const voiceURL = req.body.voiceURL; 
   const uid = req.body.uid;
   const tag = req.body.tag;
+  const isRead = false;
 
   if(imageURL.length > 0 && voiceURL.length > 0 && uid.length > 0){
     console.log(voiceURL)
     const emotionResult = await imageAnalys(urlChangeGS(imageURL));
     const voiceText = await speechToText(urlChangeGS(voiceURL)); 
-    const statusMessage = await setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,tag);
+    const statusMessage = await setDiaryData(diaryId,uid,emotionResult,imageURL,voiceURL,voiceText,tag,isRead);
     res.send(statusMessage);
   }else{
     res.send({"message": `求められているパラメータが不足しています。 imageURL: ${imageURL}, voiceURL: ${voiceURL}, uid: ${uid},tag:${tag}`});
