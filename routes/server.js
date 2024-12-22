@@ -134,17 +134,16 @@ function urlChangeGS(url){
   return result;
 }
 
-async function setDiaryData(diaryId,uid, emotionResult, imageURL, voiceURL, voiceText,tag,isRead){
-  try{
+async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText, tag, isRead) {
+  try {
     const roomSnapshot = await db.collection('Rooms').where('members', 'array-contains', uid).get();
     if (roomSnapshot.empty) {
       throw new Error('No matching documents.');
     }
     const roomid = roomSnapshot.docs[0].id;
-    const docRef = db.collection('Rooms').doc(roomid).collection("Diaries");
-    console.log(docRef);
-    await docRef.add({
-      diaryId: diaryId,
+    const docRef = db.collection('Rooms').doc(roomid).collection("Diaries").doc();
+    await docRef.set({
+      diaryId: docRef.id,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
       emotionResult: emotionResult,
       imageURL: imageURL,
@@ -165,7 +164,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/diary", async function (req, res) {
-  const diaryId = req.body.diaryId;
   const imageURL = req.body.imageURL; 
   const voiceURL = req.body.voiceURL; 
   const uid = req.body.uid;
@@ -176,7 +174,15 @@ router.post("/diary", async function (req, res) {
     console.log(voiceURL)
     const emotionResult = await imageAnalys(urlChangeGS(imageURL));
     const voiceText = await speechToText(urlChangeGS(voiceURL)); 
-    const statusMessage = await setDiaryData(diaryId,uid,emotionResult,imageURL,voiceURL,voiceText,tag,isRead);
+    const statusMessage = await setDiaryData(
+      uid,
+      emotionResult,
+      imageURL,
+      voiceURL,
+      voiceText,
+      tag,
+      isRead
+    );
     res.send(statusMessage);
   }else{
     res.send({"message": `求められているパラメータが不足しています。 imageURL: ${imageURL}, voiceURL: ${voiceURL}, uid: ${uid},tag:${tag}`});
