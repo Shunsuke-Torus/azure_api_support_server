@@ -134,7 +134,7 @@ function urlChangeGS(url){
   return result;
 }
 
-async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,tag,isRead){
+async function setDiaryData(diaryId,uid, emotionResult, imageURL, voiceURL, voiceText,tag,isRead){
   try{
     const roomSnapshot = await db.collection('Rooms').where('members', 'array-contains', uid).get();
     if (roomSnapshot.empty) {
@@ -144,6 +144,7 @@ async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,ta
     const docRef = db.collection('Rooms').doc(roomid).collection("Diaries");
     console.log(docRef);
     await docRef.add({
+      diaryId: diaryId,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
       emotionResult: emotionResult,
       imageURL: imageURL,
