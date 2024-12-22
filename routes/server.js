@@ -130,11 +130,11 @@ function urlChangeGS(url){
   const deleteEndIndex = url.indexOf("?");
   const text = url.slice(deleteStartIndex + 3, deleteEndIndex);
   const result = process.env.GS_URL + text.replace(/%2F/g, "/");
-  console.log(result); // ここで結果を表示
+  console.log(result);
   return result;
 }
 
-async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,tag){
+async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,tag,isRead){
   try{
     const roomSnapshot = await db.collection('Rooms').where('members', 'array-contains', uid).get();
     if (roomSnapshot.empty) {
@@ -151,6 +151,7 @@ async function setDiaryData(uid, emotionResult, imageURL, voiceURL, voiceText,ta
       voiceText: voiceText,
       tag: tag,
       createdBy: uid,
+      isRead: isRead
     });
     return {"code":"0","Message":"Save is Done."}
   }catch(e){
